@@ -1,0 +1,19 @@
+flowchart TD
+  Guest[Guest browser] --> CDN[CDN / Edge cache]
+  CDN --> FE[React + Bootstrap SPA<br/>Static hosting: Vercel]
+  FE --> API[API Gateway / Load Balancer]
+  API --> BFF[Spring Boot services<br/>Stateless horizontal replicas]
+  BFF --> Auth[Identity / OAuth]
+  BFF --> Listing[Listing service]
+  BFF --> Booking[Booking & availability service]
+  BFF --> Search[Search service]
+  Listing --> Cache[(Redis cache)]
+  Search --> Index[(Search index<br/>OpenSearch / Elasticsearch)]
+  Listing --> DB[(Relational DB<br/>PostgreSQL primary + replicas)]
+  Booking --> DB
+  Booking --> Queue[Event queue]
+  Queue --> Notify[Notification workers]
+  Listing --> Object[(Object storage<br/>photos / media)]
+  Object --> CDN
+  BFF --> Obs[Logs, metrics, traces<br/>alerts]
+  FE --> Obs
